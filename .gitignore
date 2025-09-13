@@ -1,0 +1,7 @@
+.cache
+.DS_Store
+cmake/.DS_Store
+server/.DS_Store
+templates/.DS_Store
+build
+compile_commands.json
