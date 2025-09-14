@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Users - All users</title>
+</head>
+<body>
+	<h1>All users:</h1>
+ 	{{#users}}
+		<fieldset>	
+			<legend><h3>User #{{index}}</h3></legend>
+			<p>Username: {{uname}}</p>
+			<p>Password: {{pword}}</p>
+		</fieldset>
+	{{/users}}
+</body>
+</html>
+

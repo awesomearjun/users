@@ -21,15 +21,15 @@ int main()
     CROW_ROUTE(app, "/")(
         []()
         {
-            auto index = crow::mustache::load_text("index.html");
-            return index;
+            auto indexPage = crow::mustache::load_text("index.html");
+            return indexPage;
         });
 
     CROW_ROUTE(app, "/form")(
         []()
         {
-            auto form = crow::mustache::load_text("form.html");
-            return form;
+            auto formPage = crow::mustache::load_text("form.html");
+            return formPage;
         });
 
     CROW_ROUTE(app, "/submitted_data")
@@ -44,19 +44,40 @@ int main()
 
                 users.push_back(User({uname, pword}));
 
-				for (int i = 0; i < users.size(); i++)
-				{
-					std::cout << "User #" << i << std::endl;
-					std::cout << "Username: " << users[i].username << std::endl;
-					std::cout << "Password: " << users[i].password << std::endl;
-					std::cout << std::endl;
-				}
+                for (int i = 0; i < users.size(); i++)
+                {
+                    std::cout << "User #" << i << std::endl;
+                    std::cout << "Username: " << users[i].username << std::endl;
+                    std::cout << "Password: " << users[i].password << std::endl;
+                    std::cout << std::endl;
+                }
 
                 crow::response res;
                 res.code = 302;
                 res.set_header("Location", "/");
                 return res;
             });
+
+    CROW_ROUTE(app, "/users")(
+        [&users]()
+        {
+            auto usersPage = crow::mustache::load("users.html");
+
+            crow::mustache::context ctx;
+            std::vector<crow::mustache::context> userCtxArray;
+
+            for (int i = 0; i < users.size(); i++)
+            {
+				crow::mustache::context buff;
+                buff["index"] = i + 1;
+                buff["uname"] = users[i].username;
+                buff["pword"] = users[i].password;
+                userCtxArray.push_back(buff);
+            }
+
+            ctx["users"] = std::move(userCtxArray);
+            return usersPage.render(ctx);
+        });
 
     app.port(1800).multithreaded().run();
 }
